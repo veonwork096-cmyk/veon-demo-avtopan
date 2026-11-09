@@ -5,6 +5,7 @@ import CallButton from "./CallButton.astro";
 import FutureLink from "./FutureLink.astro";
 import Icon from "./Icon.astro";
 import { stations, futureNote, messengers } from "../data/site";
+import logoUrl from "../assets/logo-avtopan.webp?url";
 
 const anchors = [
   { href: "#vehicles", label: "Для якого авто" },
@@ -17,7 +18,7 @@ const future = ["Ціни", "Акції", "Запчастини"];
 <header class="header" data-header data-rec="R-006,R-002">
   <div class="container header__row">
     <a class="header__logo" href="#top" aria-label="Автопан, на початок сторінки">
-      <img src="/img/logo-avtopan.webp" width="346" height="80" alt="Автопан, станція технічного обслуговування" />
+      <img src={logoUrl} width="346" height="80" alt="Автопан, станція технічного обслуговування" />
     </a>
 
     <nav class="header__nav" aria-label="Головне меню">
@@ -50,7 +51,7 @@ const future = ["Ціни", "Акції", "Запчастини"];
     <div class="container menu__inner">
       <div class="menu__top">
         <a class="header__logo" href="#top" data-menu-close aria-label="Автопан, на початок сторінки">
-          <img src="/img/logo-avtopan.webp" width="346" height="80" alt="" />
+          <img src={logoUrl} width="346" height="80" alt="" />
         </a>
         <button type="button" class="header__burger menu__close" data-menu-close aria-label="Закрити меню">
           <Icon name="close" />
