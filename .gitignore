@@ -1,0 +1,42 @@
+# VEON client repository: only what is needed to continue developing the site.
+# Research, client PDFs, shared client data and secrets stay in the local project folder
+# (veon-project/references/demo.md §8). Add a path below only with a reason in decisions.md.
+/*
+!/.gitignore
+!/.gitattributes
+!/README.md
+!/site/
+!/design/
+!/content/
+
+# never in git
+*.pdf
+*.zip
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+id_rsa*
+id_ed25519*
+*credentials*
+*.secret
+secrets/
+**/internal*.md
+.hallmark/
+
+# dependencies, builds, caches, system files
+node_modules/
+dist/
+.astro/
+.cache/
+.wrangler/
+.vercel/
+.netlify/
+.DS_Store
+._*
+Thumbs.db
+desktop.ini
+*.log

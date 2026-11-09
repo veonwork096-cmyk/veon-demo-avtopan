@@ -1,0 +1,55 @@
+---
+// Homepage of the Автопан demo (design/concept.md §8). Only this page is built; future pages are FutureLink.
+import Base from "../layouts/Base.astro";
+import Header from "../components/Header.astro";
+import Hero from "../components/Hero.astro";
+import CallSheet from "../components/CallSheet.astro";
+import Vehicles from "../components/Vehicles.astro";
+import Services from "../components/Services.astro";
+import About from "../components/About.astro";
+import Stations from "../components/Stations.astro";
+import Footer from "../components/Footer.astro";
+import MobileBar from "../components/MobileBar.astro";
+import { stations, messengers } from "../data/site";
+
+const title = "СТО Автопан — Київ (Борщагівка) і Львів (Сигнівка)";
+const description = "Ремонт і ТО легкових авто, бусів і вантажівок. Київ, пр-т Корольова, 11/1 і Львів, вул. Грузинська, 25. Працюємо з 2008 року. Подзвоніть на станцію.";
+
+const dayCodes = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+const hhmm = (m: number) => `${String(Math.floor(m / 60)).padStart(2, "0")}:${String(m % 60).padStart(2, "0")}`;
+const ld = {
+  "@context": "https://schema.org",
+  "@graph": [
+    { "@type": "Organization", "@id": "#org", name: "Автопан", foundingDate: "2008", email: "zakaz@avtopan.ua", sameAs: [messengers.telegram] },
+    ...stations.map((s) => ({
+      "@type": "AutoRepair",
+      name: `Автопан, ${s.city}`,
+      parentOrganization: { "@id": "#org" },
+      address: { "@type": "PostalAddress", streetAddress: s.address, addressLocality: s.city, addressCountry: "UA" },
+      telephone: s.phones.map((p) => p.tel),
+      email: s.email,
+      areaServed: s.city,
+      openingHoursSpecification: s.week.flatMap((h, i) => (h ? [{ "@type": "OpeningHoursSpecification", dayOfWeek: dayCodes[i], opens: hhmm(h.open), closes: hhmm(h.close) }] : [])),
+    })),
+  ],
+};
+---
+<Base lang="uk" title={title} description={description}>
+  <Fragment slot="head">
+    <link rel="preload" href="/fonts/geologica-cyrillic-800-normal.woff2" as="font" type="font/woff2" crossorigin />
+    <script type="application/ld+json" set:html={JSON.stringify(ld)} />
+  </Fragment>
+  <Header slot="header" />
+  <Hero />
+  <Vehicles />
+  <Services />
+  <About />
+  <Stations />
+  <CallSheet />
+  <Footer slot="footer" />
+  <MobileBar slot="footer" />
+</Base>
+
+<script>
+  import "../scripts/main";
+</script>

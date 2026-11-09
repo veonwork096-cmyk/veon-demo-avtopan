@@ -1,0 +1,98 @@
+---
+// Stations and contacts (concept §8.2 #5): two equal halves, Kyiv | Lviv. City, address, a week strip of hours with today marked,
+// the status now, every phone of the city, the city's e-mail and the route. Viber and Telegram are shared (I-010).
+import Icon from "./Icon.astro";
+import FutureLink from "./FutureLink.astro";
+import { stations, messengers, mapUrl, days, daysFull, fmt, futureNote } from "../data/site";
+---
+<section id="stations" class="stations section" data-rec="R-008,R-003,S-R013">
+  <div class="container">
+    <h2>Дві станції: Київ і Львів</h2>
+
+    <div class="stations__grid">
+      {stations.map((s) => (
+        <article class="station" aria-labelledby={`st-${s.id}`}>
+          <h3 id={`st-${s.id}`} class="station__city">{s.city}</h3>
+          <p class="station__where">{s.district}, {s.address}<span class="visually-hidden">.</span></p>
+          <p class="station__status" data-status={s.id} hidden></p>
+
+          <ol class="week" data-week={s.id} aria-label={`Графік роботи, ${s.city}`}>
+            {s.week.map((h, i) => (
+              <li class:list={["week__day", !h && "is-off"]} data-day={i}>
+                <abbr class="week__name" title={daysFull[i]}>{days[i]}</abbr>
+                {h ? (
+                  <span class="week__time num">{fmt(h.open)}<span class="visually-hidden"> до </span><span aria-hidden="true">–</span><br />{fmt(h.close)}</span>
+                ) : (
+                  <span class="week__time"><span class="week__off-long">вихідний</span><abbr class="week__off-short" title="вихідний">вих.</abbr></span>
+                )}
+              </li>
+            ))}
+          </ol>
+          {s.note && <p class="station__note">{s.note}</p>}
+
+          <ul class="station__phones" aria-label={`Телефони, ${s.city}`}>
+            {s.phones.map((p) => (
+              <li><a class="station__phone num" href={`tel:${p.tel}`}><Icon name="phone" />{p.label}<span class="visually-hidden">;</span></a></li>
+            ))}
+          </ul>
+
+          <div class="station__links">
+            <a class="link station__mail" href={`mailto:${s.email}`}><Icon name="mail" />{s.email}</a>
+            <a class="btn btn--outline btn--small nowrap" href={mapUrl(s)} target="_blank" rel="noopener"><Icon name="route" />Маршрут<span class="visually-hidden"> (відкриється карта)</span></a>
+            <FutureLink note={futureNote}>Сторінка станції</FutureLink>
+          </div>
+        </article>
+      ))}
+    </div>
+
+    <div class="stations__msg">
+      <p>Або напишіть нам у месенджер</p>
+      <div class="stations__msg-links">
+        <a class="btn btn--outline" href={messengers.viber}><Icon name="viber" />Viber</a>
+        <a class="btn btn--outline" href={messengers.telegram}><Icon name="telegram" />Telegram</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .stations__grid { display: grid; gap: var(--space-2xl); margin-top: var(--space-2xl); }
+  .station { display: grid; gap: var(--space-md); align-content: start; padding-top: var(--space-lg); border-top: var(--rule-strong) solid var(--color-text); }
+  .station__city { font-size: var(--text-xl); line-height: 0.95; }
+  .station__where { font-size: var(--text-lead); }
+  .station__status { font-weight: 600; color: var(--color-muted); }
+  .station__status:global(.is-open) { color: var(--color-open); }
+
+  .week { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: var(--space-2xs); margin-top: var(--space-xs); }
+  .week__day { display: grid; gap: var(--space-2xs); padding: var(--space-xs) var(--space-2xs); background: var(--color-surface); border-radius: var(--radius); text-align: center; font-size: var(--text-sm); line-height: 1.25; }
+  .week__name { font-weight: 600; text-decoration: none; }
+  .week__time { color: var(--color-muted); font-size: var(--text-xs); }
+  .week__off-long { display: none; }
+  .week__off-short { text-decoration: none; }
+  .week__day.is-off .week__time { color: var(--color-text); }
+  .week__day:global(.is-today) { background: var(--color-field); color: var(--color-on-field); }
+  .week__day:global(.is-today) .week__time { color: var(--color-on-field); }
+  .station__note { font-size: var(--text-sm); color: var(--color-muted); margin-top: calc(-1 * var(--space-xs)); }
+
+  .station__phones { display: grid; gap: var(--space-2xs); margin-top: var(--space-xs); }
+  .station__phone { display: inline-flex; align-items: center; gap: var(--space-sm); min-height: var(--control-h-s); font: 800 var(--text-title)/1.1 var(--font-display); letter-spacing: var(--track-display); text-decoration: none; border-radius: var(--radius); transition: color var(--dur-micro) var(--ease-out); }
+  .station__phone:hover { color: var(--color-accent); }
+  .station__phone :global(.icon) { width: var(--icon-l); height: var(--icon-l); }
+  .station__links { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-sm) var(--space-lg); }
+  .station__mail { display: inline-flex; align-items: center; gap: var(--space-xs); min-height: var(--control-h-s); }
+  .station__links :global(.future-link) { min-height: var(--control-h-s); font-size: var(--text-sm); }
+
+  .stations__msg { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--space-md) var(--space-lg); margin-top: var(--space-2xl); padding-top: var(--space-lg); border-top: 1px solid var(--color-rule); }
+  .stations__msg p { font-size: var(--text-lead); font-weight: 600; }
+  .stations__msg-links { display: flex; flex-wrap: wrap; gap: var(--space-sm); }
+
+  @media (min-width: 48rem) {
+    .stations__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--gap-columns); column-gap: var(--space-2xl); }
+    .week__time { font-size: var(--text-sm); }
+    .week__off-long { display: inline; }
+    .week__off-short { display: none; }
+  }
+  @media (min-width: 64rem) {
+    .stations__grid { margin-top: var(--space-2xl); column-gap: var(--space-3xl); }
+  }
+</style>

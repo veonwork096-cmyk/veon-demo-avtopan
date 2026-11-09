@@ -1,0 +1,54 @@
+---
+// Light footer on the second surface (concept §5 «Футер»): Kyiv, Lviv, sections (FutureLink) with messengers and confirmed socials.
+import FutureLink from "./FutureLink.astro";
+import { stations, messengers, socials, futureNote } from "../data/site";
+
+const sections = ["Ціни", "Акції", "Запчастини", "Корпоративним клієнтам", "Корисне", "Питання-відповіді", "Програма лояльності", "Вакансії", "Політика конфіденційності"];
+---
+<footer class="footer">
+  <div class="container">
+    <div class="footer__grid">
+      {stations.map((s) => (
+        <div class="footer__col">
+          <h2 class="footer__head">{s.city}</h2>
+          <p>{s.district}, {s.address}<span class="visually-hidden">.</span></p>
+          <ul class="footer__list">
+            {s.phones.map((p) => <li><a class="link num" href={`tel:${p.tel}`}>{p.label}<span class="visually-hidden">;</span></a></li>)}
+            <li><a class="link" href={`mailto:${s.email}`}>{s.email}</a></li>
+          </ul>
+        </div>
+      ))}
+      <div class="footer__col footer__col--wide">
+        <h2 class="footer__head">Розділи</h2>
+        <ul class="footer__sections">
+          {sections.map((t) => <li><FutureLink note={futureNote}>{t}</FutureLink></li>)}
+        </ul>
+        <ul class="footer__social" data-rec="S-R014">
+          <li><a class="link" href={messengers.viber}>Viber</a></li>
+          <li><a class="link" href={messengers.telegram}>Telegram</a></li>
+          {socials.map((s) => <li><a class="link" href={s.url} rel="noopener" target="_blank">{s.name}</a></li>)}
+        </ul>
+      </div>
+    </div>
+    <p class="footer__legal">© Автопан, з 2008 року</p>
+  </div>
+</footer>
+
+<style>
+  .footer { padding-block: var(--space-3xl) var(--space-xl); background: var(--color-surface); }
+  .footer__grid { display: grid; gap: var(--space-xl); }
+  .footer__col { display: grid; gap: var(--space-sm); align-content: start; }
+  .footer__head { max-width: none; font-size: var(--text-title); }
+  .footer__list { display: grid; }
+  .footer__list a, .footer__social a { display: inline-flex; align-items: center; min-height: var(--control-h-s); }
+  .footer__sections { display: grid; grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr)); column-gap: var(--space-lg); }
+  .footer__sections :global(.future-link) { min-height: var(--control-h-s); }
+  .footer__social { display: flex; flex-wrap: wrap; column-gap: var(--space-lg); margin-top: var(--space-xs); }
+  .footer__legal { margin-top: var(--space-2xl); padding-top: var(--space-md); border-top: 1px solid var(--color-rule); font-size: var(--text-sm); color: var(--color-muted); }
+
+  @media (min-width: 64rem) {
+    .footer__grid { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gap-columns); }
+    .footer__col { grid-column: span 3; }
+    .footer__col--wide { grid-column: 7 / -1; }
+  }
+</style>

@@ -1,0 +1,95 @@
+---
+// «Перелік майстерні» (concept §5 «Послуги», §8.2 #3): a sticky head with the call on the left, eight groups by car system
+// on the right, then the tow-truck band and the extras. Groups are <details>: open on desktop and without scripting,
+// collapsible on a phone (src/scripts/main.ts).
+import CallButton from "./CallButton.astro";
+import FutureLink from "./FutureLink.astro";
+import Icon from "./Icon.astro";
+import { serviceGroups, futureNote } from "../data/site";
+---
+<section id="services" class="services section" data-rec="R-004">
+  <div class="container services__grid">
+    <div class="services__head">
+      <h2>Що ремонтуємо на обох станціях</h2>
+      <CallButton variant="outline" class="services__call" />
+    </div>
+
+    <div class="services__body">
+      <ul class="groups">
+        {serviceGroups.map((g) => (
+          <li>
+            <details class="group" data-group open>
+              <summary class="group__summary">
+                <h3 class="group__title">{g.title}</h3>
+                <Icon name="chevron" class="group__chevron" />
+              </summary>
+              <div class="group__body">
+                <p class="group__text">{g.text}</p>
+                <CallButton variant="text" label="Подзвонити щодо цього" hint={`(${g.title})`} chevron={false} class="group__call" />
+              </div>
+            </details>
+          </li>
+        ))}
+      </ul>
+      <div class="groups__call">
+        <CallButton variant="outline" hint="щодо ремонту" />
+      </div>
+
+      <div class="tow" data-rec="R-004">
+        <h3 class="tow__title">Авто не їде? Оренда лафету</h3>
+        <p class="tow__text">Подзвоніть на станцію, і домовимося про лафет.</p>
+        <CallButton variant="primary" hint="щодо оренди лафета" />
+      </div>
+
+      <div class="extras">
+        <p>Ще: встановлення автосвітла, відеореєстратора, проставок.</p>
+        <p class="extras__links">
+          <FutureLink note={futureNote}>Додаткове обладнання</FutureLink>
+          <FutureLink note={futureNote}>Усі послуги</FutureLink>
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .services__grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-xl); }
+  .services__head { display: grid; gap: var(--space-lg); justify-items: start; align-content: start; }
+  .groups { display: grid; border-top: 1px solid var(--color-rule); }
+  .groups > li { border-bottom: 1px solid var(--color-rule); }
+  .group__summary { display: flex; align-items: center; justify-content: space-between; gap: var(--space-md); min-height: var(--control-h); padding-block: var(--space-sm); cursor: pointer; list-style: none; border-radius: var(--radius); }
+  .group__summary::-webkit-details-marker { display: none; }
+  .group__title { font-size: var(--text-title); }
+  .group__summary :global(.group__chevron) { width: var(--icon-l); height: var(--icon-l); transition: transform var(--dur-short) var(--ease-out); }
+  .group[open] .group__summary :global(.group__chevron) { transform: rotate(180deg); }
+  .group__body { display: grid; justify-items: start; gap: var(--space-2xs); padding-bottom: var(--space-md); }
+  .group__text { max-width: 60ch; color: var(--color-muted); }
+  .group__body :global(.group__call) { margin-left: calc(-1 * var(--space-xs)); font-size: var(--text-sm); }
+
+  .groups__call { margin-top: var(--space-lg); }
+  .tow { display: grid; justify-items: start; gap: var(--space-md); margin-top: var(--space-2xl); padding: var(--space-xl) var(--space-lg); background: var(--color-surface); border-radius: var(--radius); }
+  .tow__title { font-size: var(--text-h3); max-width: 16ch; }
+  .tow__text { color: var(--color-muted); }
+
+  .extras { display: grid; gap: var(--space-xs); margin-top: var(--space-xl); }
+  .extras__links { display: flex; flex-wrap: wrap; gap: var(--space-xs) var(--space-lg); }
+  .extras__links :global(.future-link) { min-height: var(--control-h-s); }
+
+  @media (min-width: 64rem) {
+    .services__grid { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gap-columns); align-items: start; }
+    .services__head { grid-column: 1 / span 5; position: sticky; top: calc(var(--nav-h) + var(--space-xl)); }
+    .services__body { grid-column: 7 / -1; }
+    .groups { gap: var(--space-2xl); border: 0; }
+    .groups > li { border: 0; }
+    .groups__call { display: none; }
+    .group__summary { min-height: 0; padding: 0; cursor: default; }
+    .group__summary :global(.group__chevron) { display: none; }
+    .group__title { font-size: var(--text-h3); }
+    .group__body { padding: var(--space-sm) 0 0; }
+    .group__text { font-size: var(--text-lead); }
+    .tow { margin-top: var(--space-3xl); padding: var(--space-xl); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .group__summary :global(.group__chevron) { transition: none; }
+  }
+</style>

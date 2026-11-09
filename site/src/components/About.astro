@@ -1,0 +1,70 @@
+---
+// «З 2008 року» (concept §8.2 #4): the year at graphic scale (the only one on the page), three short facts, the Bosch Service
+// line as a fact of the sign only (C-001, C-002), and the one real photograph of the Kyiv station, never wider than its file.
+import { Picture } from "astro:assets";
+import CallButton from "./CallButton.astro";
+import FutureLink from "./FutureLink.astro";
+import fasad from "../assets/fasad-avtopan.webp";
+import { futureNote } from "../data/site";
+---
+<section id="about" class="about section" data-rec="R-008">
+  <div class="container">
+    <div class="about__top">
+      <h2 class="about__title">
+        <span class="about__pre">Працюємо з</span>{" "}
+        <span class="about__year num">2008</span>{" "}
+        <span class="about__post">року</span>
+      </h2>
+      <div class="about__facts">
+        <ul class="facts">
+          <li>Дві станції: Київ, Борщагівка, і Львів, Сигнівка.</li>
+          <li>Легкові, буси й фургони, а для вантажних і малотоннажок окремий цех.</li>
+          <li>Запчастини з власного складу і на замовлення.</li>
+        </ul>
+        <p class="about__bosch">На вивісці станції — Bosch Service.</p>
+        <div class="about__actions">
+          <CallButton variant="outline" />
+          <FutureLink note={futureNote}>Більше про станції</FutureLink>
+        </div>
+      </div>
+    </div>
+
+    <figure class="about__photo">
+      <Picture
+        src={fasad}
+        formats={["avif", "webp"]}
+        fallbackFormat="webp"
+        widths={[600, 900, 1200]}
+        sizes="(min-width: 1320px) 1200px, calc(100vw - 2 * clamp(20px, 5vw, 64px))"
+        alt="Фасад станції Автопан у Києві: ворота боксів, вивіска Bosch Car Service, біля входу стоять буси й легкові авто"
+        loading="lazy"
+        decoding="async"
+      />
+      <figcaption>Станція в Києві, пр-т Корольова, 11/1</figcaption>
+    </figure>
+  </div>
+</section>
+
+<style>
+  .about__top { display: grid; gap: var(--space-xl); }
+  .about__title { max-width: none; line-height: 0.92; }
+  .about__pre, .about__post { display: block; font-size: var(--text-section); }
+  .about__year { display: block; font-size: var(--text-year); line-height: 0.85; letter-spacing: -0.03em; margin-block: var(--space-xs); }
+  .about__facts { display: grid; gap: var(--space-lg); align-content: end; }
+  .facts { display: grid; gap: var(--space-sm); }
+  .facts li { padding-top: var(--space-sm); border-top: 1px solid var(--color-rule); max-width: 46ch; }
+  .about__bosch { color: var(--color-muted); }
+  .about__actions { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-md) var(--space-lg); }
+  .about__actions :global(.future-link) { min-height: var(--control-h-s); }
+
+  .about__photo { margin: var(--space-2xl) 0 0; max-width: var(--photo-max); }
+  .about__photo :global(img) { width: 100%; height: auto; aspect-ratio: 21 / 9; object-fit: cover; object-position: 50% 60%; border-radius: var(--radius); background: var(--color-surface); }
+  .about__photo figcaption { margin-top: var(--space-sm); font-size: var(--text-sm); color: var(--color-muted); }
+
+  @media (min-width: 64rem) {
+    .about__top { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gap-columns); align-items: end; }
+    .about__title { grid-column: 1 / span 6; }
+    .about__facts { grid-column: 8 / -1; }
+    .about__photo { margin-top: var(--space-3xl); }
+  }
+</style>

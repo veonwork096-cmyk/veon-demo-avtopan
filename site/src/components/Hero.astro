@@ -1,0 +1,110 @@
+---
+// First screen (concept §5, §8.2 #1): the staircase H1 is the LCP and the idea, one red «Подзвонити» beside the «буси,» line,
+// Viber and Telegram as text buttons, two equal station plates with today's hours and a live status (src/scripts/status.ts).
+import CallButton from "./CallButton.astro";
+import Icon from "./Icon.astro";
+import { stations, messengers, mapUrl } from "../data/site";
+---
+<section id="hero" class="hero" data-rec="R-001,R-009,R-007,G-R004,M-R003,M-R005">
+  <div class="container hero__wrap">
+    <div class="hero__grid">
+      <h1 class="hero__title">
+        <span class="hero__line hero__line--1" style="--i:0">Легкові,</span>{" "}
+        <span class="hero__line hero__line--2" style="--i:1">буси,</span>{" "}
+        <span class="hero__line hero__line--3" style="--i:2">вантажівки</span>{" "}
+        <span class="hero__line hero__tail" style="--i:3">— СТО Автопан у Києві та&nbsp;Львові</span>
+      </h1>
+
+      <div class="hero__actions" data-rec="R-003">
+        <CallButton variant="primary" class="hero__call" />
+        <div class="hero__msg">
+          <a class="btn btn--text" href={messengers.viber}><Icon name="viber" />Viber</a>
+          <a class="btn btn--text" href={messengers.telegram}><Icon name="telegram" />Telegram</a>
+        </div>
+      </div>
+    </div>
+
+    <ul class="hero__plates" aria-label="Станції" data-rec="R-008">
+      {stations.map((s) => (
+        <li class="plate">
+          <p class="plate__city"><span class="plate__name">{s.city}</span> <span class="plate__district">{s.district}</span></p>
+          <p class="plate__address">{s.address}<span class="visually-hidden">.</span></p>
+          <p class="plate__hours num" data-today={s.id}>{s.scheduleText}</p>
+          <p class="plate__status" data-status={s.id} hidden></p>
+          <a class="plate__route link" href={mapUrl(s)} rel="noopener" target="_blank">
+            <Icon name="route" />Маршрут<span class="visually-hidden"> до станції {s.city} (відкриється карта)</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .hero { padding-block: var(--space-lg) var(--space-xl); }
+  .hero__wrap { container-type: inline-size; }
+  .hero__grid {
+    /* «вантажівки» fills the container; the other steps follow 1 : 1,5 : 2,4 (concept §8.4). */
+    --w3: 6.05;
+    --s3: min(8.5rem, calc(100cqi / var(--w3)));
+    --s2: clamp(2.25rem, calc(var(--s3) * 0.647), 5.5rem);
+    --s1: clamp(1.75rem, calc(var(--s3) * 0.412), 3.5rem);
+    display: grid;
+    gap: var(--space-lg);
+  }
+  .hero__title { max-width: none; line-height: 0.96; }
+  .hero__line { display: block; }
+  .hero__line--1 { font-size: var(--s1); }
+  .hero__line--2 { font-size: var(--s2); }
+  .hero__line--3 { font-size: var(--s3); letter-spacing: -0.015em; white-space: nowrap; }
+  .hero__tail { margin-top: var(--space-sm); font: 600 clamp(1.25rem, 1rem + 1vw, 1.75rem)/1.3 var(--font-body); letter-spacing: 0; text-wrap: balance; }
+
+  .hero__actions { position: relative; z-index: 1; display: grid; gap: var(--space-xs); }
+  .hero__actions :global(.hero__call) { width: 100%; }
+  .hero__msg { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-xs); }
+  .hero__msg .btn { justify-content: center; text-decoration: none; border: var(--rule-w) solid var(--color-rule); }
+  .hero__msg .btn:hover { border-color: var(--color-text); }
+
+  .hero__plates { display: grid; gap: var(--space-xs); margin-top: var(--space-lg); }
+  .plate { display: grid; grid-template-columns: minmax(0, 1fr) auto; column-gap: var(--space-md); align-items: baseline; padding: var(--space-sm) var(--space-md); background: var(--color-surface); border-radius: var(--radius); }
+  .plate__city { grid-column: 1; display: flex; align-items: baseline; gap: var(--space-xs); flex-wrap: wrap; }
+  .plate__name { font: 800 var(--text-title)/1.1 var(--font-display); letter-spacing: var(--track-display); }
+  .plate__district { color: var(--color-muted); font-size: var(--text-sm); }
+  .plate__address { display: none; }
+  .plate__hours { grid-column: 1; font-size: var(--text-sm); font-weight: 600; }
+  .plate__status { grid-column: 1; font-size: var(--text-sm); color: var(--color-muted); }
+  .plate__status.is-open { color: var(--color-open); font-weight: 600; }
+  .plate__route { grid-column: 2; grid-row: 1 / span 3; align-self: center; display: inline-flex; align-items: center; gap: var(--space-2xs); min-height: var(--control-h-s); font-size: var(--text-sm); font-weight: 600; text-decoration-color: var(--color-rule); }
+
+  @media (min-width: 48rem) {
+    .hero { padding-block: var(--space-2xl) var(--space-2xl); }
+    .hero__actions { grid-template-columns: auto auto; justify-content: start; align-items: center; gap: var(--space-md); }
+    .hero__actions :global(.hero__call) { width: auto; padding-inline: var(--space-xl); }
+    .hero__msg { display: flex; }
+    .hero__msg .btn { border: 0; text-decoration: underline; text-decoration-color: var(--color-rule); }
+    .hero__msg .btn:hover { text-decoration-color: currentColor; }
+    .hero__plates { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--gap-columns); margin-top: var(--space-2xl); }
+    .plate { grid-template-columns: minmax(0, 1fr) auto; padding: var(--space-lg); row-gap: var(--space-2xs); }
+    .plate__name { font-size: var(--text-h3); }
+    .plate__address { display: block; grid-column: 1; }
+    .plate__route { grid-row: 1; align-self: start; }
+  }
+  @media (min-width: 64rem) {
+    .hero { padding-top: var(--space-3xl); }
+    .hero__plates { margin-top: var(--space-3xl); }
+    .hero__grid { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gap-columns); }
+    .hero__title { grid-column: 1 / -1; grid-row: 1; }
+    /* The action sits beside the «буси,» line, on the right half. */
+    .hero__actions { grid-column: 6 / -1; grid-row: 1; align-self: start; justify-self: end; margin-top: calc(var(--s1) * 0.96 + (var(--s2) * 0.96 - var(--control-h)) / 2); }
+  }
+
+  /* Effect 1: the staircase settles line by line. No opacity, so the LCP text is painted on the first frame. */
+  @keyframes settle { from { transform: translateY(var(--settle, 0.12em)); } to { transform: none; } }
+  :global(.js) .hero__line { animation: settle var(--dur-long) var(--ease-out) both; animation-delay: calc(var(--i) * var(--stagger-line)); }
+  @media (min-width: 48rem) {
+    :global(.js) .hero__line { --settle: 0.2em; animation-duration: var(--dur); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    :global(.js) .hero__line { animation: none; }
+  }
+</style>

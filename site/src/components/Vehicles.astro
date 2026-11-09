@@ -1,0 +1,67 @@
+---
+// Signature band (concept §5, §8.2 #2): the brand blue as a field, three vehicle classes in columns 1 : 1,5 : 2,4.
+// On a phone the columns stack and their heights keep the same scale. Effect 2: the top rule of each column draws in.
+import CallButton from "./CallButton.astro";
+import FutureLink from "./FutureLink.astro";
+import { vehicles, futureNote } from "../data/site";
+---
+<section id="vehicles" class="vehicles on-field" data-rec="R-005,G-R005">
+  <div class="container">
+    <h2 class="vehicles__title">Беремо авто <span class="nowrap">будь-якого</span> розміру</h2>
+    <ol class="scale" data-reveal>
+      {vehicles.map((v, i) => (
+        <li class={`scale__item scale__item--${i + 1}`} style={`--i:${i}`}>
+          <h3 class="scale__name">
+            {v.title}
+            {v.id === "trucks" && <span class="scale__shop"><span class="visually-hidden">, </span>окремий цех</span>}
+          </h3>
+          <p class="scale__text">{v.text}</p>
+          {v.id === "trucks" && <p class="scale__more"><FutureLink note={futureNote}>Корпоративним клієнтам</FutureLink></p>}
+        </li>
+      ))}
+    </ol>
+    <div class="vehicles__foot">
+      <p class="vehicles__parts">Запчастини: власний склад і на замовлення. <FutureLink note={futureNote}>Каталог запчастин</FutureLink></p>
+      <CallButton variant="outline" />
+    </div>
+  </div>
+</section>
+
+<style>
+  .vehicles { padding-block: var(--space-3xl); background: var(--color-field); color: var(--color-on-field); }
+  .vehicles__title { max-width: 20ch; hyphens: manual; }
+  .scale { display: grid; gap: var(--space-xl); margin-top: var(--space-2xl); counter-reset: none; }
+  .scale__item { --u: var(--space-3xl); position: relative; display: flex; flex-direction: column; gap: var(--space-sm); min-width: 0; padding-left: var(--space-lg); }
+  .scale__item--1 { min-height: calc(var(--u) * 1); }
+  .scale__item--2 { min-height: calc(var(--u) * 1.5); }
+  .scale__item--3 { min-height: calc(var(--u) * 2.4); }
+  .scale__item::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: var(--rule-strong); background: var(--color-on-field); transform-origin: top; transition: transform var(--dur-mid) var(--ease-out); transition-delay: calc(var(--i) * var(--stagger)); }
+  .scale__name { color: var(--color-on-field); }
+  .scale__item--1 .scale__name { font-size: var(--text-title); }
+  .scale__item--2 .scale__name { font-size: var(--text-h3); }
+  .scale__item--3 .scale__name { font-size: var(--text-section); }
+  .scale__shop { display: block; margin-top: var(--space-xs); font: 600 var(--text-lead)/1.3 var(--font-body); letter-spacing: 0; color: var(--color-on-field); }
+  .scale__text { max-width: 40ch; color: var(--color-on-field-muted); }
+  .scale__more { margin-top: auto; padding-top: var(--space-sm); }
+  .scale__more :global(.future-link) { min-height: var(--control-h-s); }
+  .vehicles__foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--space-lg); margin-top: var(--space-2xl); padding-top: var(--space-lg); border-top: 1px solid var(--color-on-field-muted); }
+  .vehicles__parts { color: var(--color-on-field); }
+  .vehicles__parts :global(.future-link) { margin-left: var(--space-xs); }
+
+  @media (min-width: 64rem) {
+    .vehicles { padding-block: var(--space-4xl); }
+    .scale { grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr) minmax(0, 2.4fr); gap: var(--gap-columns); align-items: end; }
+    .scale__item { min-height: 0; padding: var(--space-lg) var(--space-lg) 0 0; }
+    .scale__item::before { right: var(--space-lg); bottom: auto; width: auto; height: var(--rule-strong); transform-origin: left; transition-duration: var(--dur); }
+  }
+
+  /* Effect 2: draw the scale once when the band enters the screen (src/scripts/reveal.ts adds .is-visible). */
+  :global(.js) .scale:not(:global(.is-visible)) .scale__item::before { transform: scaleY(0); }
+  @media (min-width: 64rem) {
+    :global(.js) .scale:not(:global(.is-visible)) .scale__item::before { transform: scaleX(0); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    :global(.js) .scale:not(:global(.is-visible)) .scale__item::before { transform: none; }
+    .scale__item::before { transition: none; }
+  }
+</style>

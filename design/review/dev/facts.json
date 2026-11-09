@@ -1,0 +1,128 @@
+{
+  "start_url": "http://localhost:4321/",
+  "captured_at": "2026-11-09T09:56:55.789Z",
+  "browser": "157.0.8103.39",
+  "site": {
+    "/robots.txt": {
+      "status": 404,
+      "location": null
+    },
+    "/sitemap.xml": {
+      "status": 404,
+      "location": null
+    },
+    "security_headers": {
+      "strict-transport-security": null,
+      "content-security-policy": null,
+      "x-content-type-options": null,
+      "referrer-policy": null,
+      "x-frame-options": null,
+      "permissions-policy": null
+    },
+    "server": null
+  },
+  "pages": [
+    {
+      "url": "http://localhost:4321/",
+      "slug": "home",
+      "desktop": {
+        "status": 200,
+        "final_url": "http://localhost:4321/",
+        "load_ms_approx": 1682,
+        "console_errors": [],
+        "title": "СТО Автопан — Київ (Борщагівка) і Львів (Сигнівка)",
+        "description": "Ремонт і ТО легкових авто, бусів і вантажівок. Київ, пр-т Корольова, 11/1 і Львів, вул. Грузинська, 25. Працюємо з 2008 року. Подзвоніть на станцію.",
+        "robots_meta": "noindex",
+        "lang": "uk",
+        "canonical": null,
+        "viewport_meta": "width=device-width, initial-scale=1",
+        "h1": [
+          "Легкові, буси, вантажівки — СТО Автопан у Києві та Львові"
+        ],
+        "headings_count": {
+          "h2": 7,
+          "h3": 14
+        },
+        "og": {
+          "title": true,
+          "image": false
+        },
+        "jsonld_types": [
+          "Organization",
+          "AutoRepair",
+          "AutoRepair"
+        ],
+        "images": 3,
+        "images_without_alt": 0,
+        "forms": 0,
+        "tel_links": 14,
+        "mailto_links": 4,
+        "messenger_links": 10,
+        "words": 618,
+        "horizontal_overflow_px": 0,
+        "trackers": [],
+        "screens": {
+          "fold": "screens\\home-desktop-fold.png",
+          "full": "screens\\home-desktop-full.png",
+          "sections": [
+            "screens\\home-desktop-s01.png",
+            "screens\\home-desktop-s02.png",
+            "screens\\home-desktop-s03.png",
+            "screens\\home-desktop-s04.png"
+          ],
+          "page_height_px": 7163,
+          "full_cropped": false
+        }
+      },
+      "mobile": {
+        "status": 200,
+        "final_url": "http://localhost:4321/",
+        "load_ms_approx": 1715,
+        "console_errors": [],
+        "title": "СТО Автопан — Київ (Борщагівка) і Львів (Сигнівка)",
+        "description": "Ремонт і ТО легкових авто, бусів і вантажівок. Київ, пр-т Корольова, 11/1 і Львів, вул. Грузинська, 25. Працюємо з 2008 року. Подзвоніть на станцію.",
+        "robots_meta": "noindex",
+        "lang": "uk",
+        "canonical": null,
+        "viewport_meta": "width=device-width, initial-scale=1",
+        "h1": [
+          "Легкові, буси, вантажівки — СТО Автопан у Києві та Львові"
+        ],
+        "headings_count": {
+          "h2": 7,
+          "h3": 14
+        },
+        "og": {
+          "title": true,
+          "image": false
+        },
+        "jsonld_types": [
+          "Organization",
+          "AutoRepair",
+          "AutoRepair"
+        ],
+        "images": 3,
+        "images_without_alt": 0,
+        "forms": 0,
+        "tel_links": 14,
+        "mailto_links": 4,
+        "messenger_links": 10,
+        "words": 466,
+        "horizontal_overflow_px": 0,
+        "screens": {
+          "fold": "screens\\home-mobile-fold.png",
+          "full": "screens\\home-mobile-full.png",
+          "sections": [
+            "screens\\home-mobile-s01.png",
+            "screens\\home-mobile-s02.png",
+            "screens\\home-mobile-s03.png",
+            "screens\\home-mobile-s04.png"
+          ],
+          "page_height_px": 7411,
+          "full_cropped": false
+        }
+      }
+    }
+  ],
+  "errors": []
+}

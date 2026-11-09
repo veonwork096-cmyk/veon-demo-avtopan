@@ -1,0 +1,19 @@
+---
+// «Подзвонити» with a choice of city (concept §8.5). Without scripting it is a link to #stations, where every phone is listed;
+// with scripting (src/scripts/main.ts) it opens the shared city sheet #call-sheet.
+import Icon from "./Icon.astro";
+interface Props { variant?: "primary" | "outline" | "text" | "light"; size?: "small"; class?: string; label?: string; hint?: string; rec?: string; chevron?: boolean }
+const { variant = "primary", size, class: cls, label = "Подзвонити", hint, rec, chevron = true } = Astro.props;
+---
+<a
+  href="#stations"
+  class:list={["btn", `btn--${variant}`, size && `btn--${size}`, cls]}
+  data-call
+  aria-haspopup="dialog"
+  aria-controls="call-sheet"
+  data-rec={rec}
+>
+  <Icon name="phone" />
+  <span>{label}{hint && <span class="visually-hidden"> {hint}</span>}</span>
+  {chevron && <Icon name="chevron" class="call-chevron" />}
+</a>

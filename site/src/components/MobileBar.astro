@@ -1,0 +1,28 @@
+---
+// Bottom action bar on a phone (concept §8.2, effect 4): appears once the hero leaves the screen, hides over #stations,
+// where the same actions are. On the blue field only light controls (red on blue is 2.54:1, concept §8.4).
+import CallButton from "./CallButton.astro";
+import Icon from "./Icon.astro";
+import { messengers } from "../data/site";
+---
+<div class="bar on-field" data-bar data-rec="R-002,M-R004">
+  <CallButton variant="light" class="bar__call" />
+  <a class="btn btn--outline bar__msg" href={messengers.viber}><Icon name="viber" /><span>Viber</span></a>
+  <a class="btn btn--outline bar__msg" href={messengers.telegram}><Icon name="telegram" /><span>Telegram</span></a>
+</div>
+
+<style>
+  .bar { position: fixed; left: 0; right: 0; bottom: 0; z-index: var(--z-bar); display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) minmax(0, 1fr); gap: var(--space-xs); padding: var(--space-xs) var(--space-xs) calc(var(--space-xs) + env(safe-area-inset-bottom)); background: var(--color-field); transition: transform var(--dur-short) var(--ease-out); }
+  .bar :global(.btn) { min-height: var(--control-h-s); padding-inline: var(--space-xs); font-size: var(--text-sm); }
+  .bar :global(.call-chevron) { display: none; }
+  :global(.js) .bar:not(:global(.is-shown)) { transform: translateY(100%); transition: transform var(--dur-exit) var(--ease-in); }
+  @media (max-width: 22rem) {
+    .bar__msg span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  }
+  @media (min-width: 48rem) {
+    .bar { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .bar, :global(.js) .bar:not(:global(.is-shown)) { transition: none; }
+  }
+</style>

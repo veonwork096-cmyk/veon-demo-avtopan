@@ -1,0 +1,142 @@
+---
+// One line, 56px on a phone and 72px from 768px (concept §5 «Навігація»): logo → #top, anchors in page order,
+// FutureLink for pages that are not built yet, both numbers with their city from 1280px, a quiet outline «Подзвонити».
+import CallButton from "./CallButton.astro";
+import FutureLink from "./FutureLink.astro";
+import Icon from "./Icon.astro";
+import { stations, futureNote, messengers } from "../data/site";
+
+const anchors = [
+  { href: "#vehicles", label: "Для якого авто" },
+  { href: "#services", label: "Послуги" },
+  { href: "#about", label: "Про нас" },
+  { href: "#stations", label: "Контакти" },
+];
+const future = ["Ціни", "Акції", "Запчастини"];
+---
+<header class="header" data-header data-rec="R-006,R-002">
+  <div class="container header__row">
+    <a class="header__logo" href="#top" aria-label="Автопан, на початок сторінки">
+      <img src="/img/logo-avtopan.webp" width="346" height="80" alt="Автопан, станція технічного обслуговування" />
+    </a>
+
+    <nav class="header__nav" aria-label="Головне меню">
+      <ul class="header__links">
+        {anchors.map((a) => <li><a class="header__link" href={a.href}>{a.label}</a></li>)}
+        {future.map((f) => <li><FutureLink note={futureNote} class="header__link header__link--future">{f}</FutureLink></li>)}
+      </ul>
+    </nav>
+
+    <div class="header__actions">
+      <ul class="header__phones">
+        {stations.map((s) => (
+          <li>
+            <a class="header__phone" href={`tel:${s.phones[0].tel}`}>
+              <span class="header__phone-city">{s.city}</span>
+              <span class="num">{s.phones[0].label}</span><span class="visually-hidden">;</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+      <CallButton variant="outline" size="small" class="header__call" />
+      <button type="button" class="header__burger" data-menu-open aria-expanded="false" aria-controls="mobile-menu">
+        <Icon name="menu" />
+        <span class="visually-hidden">Меню</span>
+      </button>
+    </div>
+  </div>
+
+  <div id="mobile-menu" class="menu" data-menu hidden>
+    <div class="container menu__inner">
+      <div class="menu__top">
+        <a class="header__logo" href="#top" data-menu-close aria-label="Автопан, на початок сторінки">
+          <img src="/img/logo-avtopan.webp" width="346" height="80" alt="" />
+        </a>
+        <button type="button" class="header__burger menu__close" data-menu-close aria-label="Закрити меню">
+          <Icon name="close" />
+        </button>
+      </div>
+      <nav aria-label="Меню">
+        <ul class="menu__links">
+          {anchors.map((a) => <li><a class="menu__link" href={a.href} data-menu-close>{a.label}</a></li>)}
+          {future.map((f) => <li><FutureLink note={futureNote} class="menu__link">{f}</FutureLink></li>)}
+        </ul>
+      </nav>
+      <div class="menu__contacts">
+        {stations.map((s) => (
+          <p>
+            <span class="menu__city">{s.city}, {s.district}</span>
+            <a class="menu__phone num" href={`tel:${s.phones[0].tel}`}>{s.phones[0].label}<span class="visually-hidden">;</span></a>
+          </p>
+        ))}
+        <p class="menu__msg">
+          <a class="btn btn--outline btn--small" href={messengers.viber}><Icon name="viber" />Viber</a>
+          <a class="btn btn--outline btn--small" href={messengers.telegram}><Icon name="telegram" />Telegram</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</header>
+
+<style>
+  .header { position: sticky; top: 0; z-index: var(--z-sticky-nav); background: var(--color-bg); border-bottom: 1px solid transparent; transition: border-color var(--dur-short) var(--ease-out); }
+  .header.is-scrolled { border-bottom-color: var(--color-rule); }
+  .header__row { display: flex; align-items: center; gap: var(--space-lg); height: var(--nav-h); }
+  .header__logo { display: block; flex-shrink: 0; margin-right: auto; border-radius: var(--radius); }
+  .header__logo img { width: auto; height: var(--logo-h); }
+  .header__nav { display: none; }
+  .header__links { display: flex; align-items: center; gap: var(--space-lg); }
+  .header__link { display: inline-flex; align-items: center; min-height: var(--control-h-s); font-size: var(--text-sm); color: var(--color-text); text-decoration: none; white-space: nowrap; border-radius: var(--radius); }
+  a.header__link { background-image: linear-gradient(currentColor, currentColor); background-repeat: no-repeat; background-position: 0 calc(100% - var(--space-sm)); background-size: 0 1px; transition: background-size var(--dur-short) var(--ease-out), color var(--dur-micro) var(--ease-out); }
+  a.header__link:hover { background-size: 100% 1px; }
+  a.header__link.is-current { color: var(--color-accent); background-size: 100% 1px; }
+  .header__actions { display: flex; align-items: center; gap: var(--space-xs); flex-shrink: 0; }
+  .header__phones { display: none; }
+  .header__phone { display: grid; line-height: 1.2; text-decoration: none; font-weight: 600; font-size: var(--text-sm); white-space: nowrap; border-radius: var(--radius); transition: color var(--dur-micro) var(--ease-out); }
+  .header__phone:hover { color: var(--color-accent); }
+  .header__phone-city { font-weight: 400; color: var(--color-muted); }
+  .header__actions :global(.header__call) { padding-inline: var(--space-sm); font-size: var(--text-sm); }
+  .header__actions :global(.header__call .call-chevron) { display: none; }
+  .header__burger { display: inline-grid; place-items: center; width: var(--control-h-s); height: var(--control-h-s); margin-right: calc(-1 * var(--space-sm)); border: 0; border-radius: var(--radius); background: transparent; color: var(--color-text); cursor: pointer; }
+  .header__burger:hover { background: var(--color-surface); }
+  .header__burger :global(.icon) { width: var(--icon-l); height: var(--icon-l); }
+  :global(html:not(.js)) .header__burger { display: none; }
+
+  .menu { position: fixed; inset: 0; z-index: var(--z-modal); overflow-y: auto; background: var(--color-bg); }
+  .menu[hidden] { display: none; }
+  .menu__inner { display: flex; flex-direction: column; min-height: 100%; padding-bottom: var(--space-xl); }
+  .menu__top { display: flex; align-items: center; justify-content: space-between; height: var(--nav-h); }
+  .menu__links { display: grid; margin-top: var(--space-lg); }
+  .menu__link { display: flex; align-items: center; min-height: var(--control-h); font: 800 var(--text-title)/1.1 var(--font-display); letter-spacing: var(--track-display); text-decoration: none; }
+  .menu__links :global(.future-link.menu__link) { font: 400 var(--text-lead)/1.2 var(--font-body); letter-spacing: 0; min-height: var(--control-h-s); }
+  .menu__contacts { display: grid; gap: var(--space-md); margin-top: auto; padding-top: var(--space-xl); }
+  .menu__contacts p { display: grid; }
+  .menu__city { font-size: var(--text-sm); color: var(--color-muted); }
+  .menu__phone { font-weight: 600; font-size: var(--text-lead); min-height: var(--control-h-s); display: inline-flex; align-items: center; text-decoration: none; }
+  .menu__msg { display: flex !important; gap: var(--space-xs); flex-wrap: wrap; }
+
+  @media (max-width: 23.4rem) {
+    .header__actions :global(.header__call) { width: var(--control-h-s); padding: 0; }
+    .header__actions :global(.header__call span) { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  }
+  @media (min-width: 48rem) {
+    .header__actions :global(.header__call) { padding-inline: var(--space-md); }
+  }
+  @media (min-width: 64rem) {
+    .header__nav { display: block; }
+    .header__burger { display: none !important; }
+    .header__row { gap: var(--space-xl); }
+    .header__logo { margin-right: 0; }
+    .header__actions { margin-left: auto; gap: var(--space-lg); }
+  }
+  @media (min-width: 64rem) and (max-width: 89.99rem) {
+    .header__row { gap: var(--space-lg); }
+    .header__links { gap: var(--space-md); }
+  }
+  @media (min-width: 90rem) {
+    .header__phones { display: flex; gap: var(--space-lg); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    a.header__link { transition: none; }
+  }
+</style>
